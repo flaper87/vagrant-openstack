@@ -1,5 +1,4 @@
 require 'log4r'
-require 'fog'
 
 require File.expand_path("../base", __FILE__)
 
@@ -7,7 +6,6 @@ module VagrantPlugins
   module ProviderOpenStack
     module Driver
       class Folsom < Base
-        @@connection = nil
 
         def initialize(uuid)
           super()
@@ -16,22 +14,6 @@ module VagrantPlugins
           @uuid = uuid
         end
         
-        def create_connection(config)
-            if @@connection.nil? then
-              @connection = Fog::Compute.new(
-                :provider           => :openstack,
-                :openstack_auth_url  => configs['url'],
-                :openstack_username => configs['username'],
-                :openstack_api_key => configs['password'],
-                :openstack_service_name => configs['service_name'],
-                :openstack_service_type => configs['service_type'],
-                :openstack_region => configs['region']
-              )
-            else
-              @@connection
-            end
-        end
-
         def clear_forwarded_ports
           args = []
           read_forwarded_ports(@uuid).each do |nic, name, _, _|

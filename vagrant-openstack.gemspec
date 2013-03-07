@@ -1,5 +1,5 @@
 $:.unshift File.expand_path("../lib", __FILE__)
-require "openstack/version"
+require "vagrant-openstack/version"
 
 Gem::Specification.new do |s|
   s.name          = "vagrant-openstack"
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "vagrant-openstack"
 
   s.add_dependency "vagrant"
-  s.add_dependency "fog"
+  s.add_dependency "openstack"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "contest", ">= 0.1.2"

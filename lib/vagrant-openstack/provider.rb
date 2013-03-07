@@ -1,8 +1,10 @@
 require "log4r"
+require "openstack"
 
 module VagrantPlugins
   module ProviderOpenStack
     class Provider < Vagrant.plugin("2", :provider)
+      @@connection = nil
       attr_reader :driver
 
       def initialize(machine)
@@ -12,6 +14,20 @@ module VagrantPlugins
         # This method will load in our driver, so we call it now to
         # initialize it.
         machine_id_changed
+      end
+    
+      def connect(config)
+        if @@connection.nil? then
+          @connection = OpenStack::Connection.create({
+                            :username => config.user,
+                            :api_key => config.password,
+                            :auth_method => "password",
+                            :auth_url => config.url,
+                            :authtenant_name => config.tenant,
+                            :service_type => "compute"})
+        else
+            @@connection
+        end
       end
 
       # @see Vagrant::Plugin::V1::Provider#action
@@ -85,7 +101,7 @@ module VagrantPlugins
       # @return [String]
       def to_s
         id = @machine.id ? @machine.id : "new VM"
-        "VirtualBox (#{id})"
+        "OpenStack (#{id})"
       end
     end
   end
