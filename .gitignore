@@ -16,3 +16,8 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+# Vagrant
+.vagrant
+Vagrantfile
+!example_box/Vagrantfile
