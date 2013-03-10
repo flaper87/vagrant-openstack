@@ -15,7 +15,7 @@ module VagrantPlugins
             server = os.create_server({
                     :imageRef => config.image, 
                     :flavorRef => config.flavor, 
-                    :key_name => config.key, 
+                    :key_name => config.keypair, 
                     :name=>config.name})
             env[:machine].id = server.id
             env[:ui].warn(I18n.t("vagrant_openstack.vm_booted",
