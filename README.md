@@ -51,19 +51,19 @@ end
 ## Configuration
 
 
-* url: OpenStack's auth url
-* tenant: OpenStack's tenant to use
-* user: OpenStack's auth username
-* password: OpenStack's password for `username`
+* `url`: OpenStack's auth url
+* `tenant`: OpenStack's tenant to use
+* `user`: OpenStack's auth username
+* `password`: OpenStack's password for `username`
 
-* name: Instance's name. It'll be assigned to it during the first boot.
-* image: Glance's image id to use. (It doesn't support names)
-* flavor: Nova's flavor to use for the new instance.
-* keypair: Keypair that should be associated to the new instance.
+* `name`: Instance's name. It'll be assigned to it during the first boot.
+* `image`: Glance's image id to use. (It doesn't support names)
+* `flavor`: Nova's flavor to use for the new instance.
+* `keypair`: Keypair that should be associated to the new instance.
 
-* ssh_port: SSH port to used (Default 22)
-* ssh_username: SSH username
-* ssh_private_key: Local private key to be used for ssh connections. (Default ~/.ssh/id_rsa)
+* `ssh_port`: SSH port to used (Default 22)
+* `ssh_username`: SSH username
+* `ssh_private_key`: Local private key to be used for ssh connections. (Default ~/.ssh/id_rsa)
 
 ## Development
 
