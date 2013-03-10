@@ -13,17 +13,12 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "vagrant-openstack"
 
   s.add_dependency "vagrant"
-  s.add_dependency "openstack"
+  s.add_dependency "openstack", "~> 1.0.9"
 
   s.add_development_dependency "rake"
-  s.add_development_dependency "contest", ">= 0.1.2"
-  s.add_development_dependency "minitest", "~> 2.5.1"
-  s.add_development_dependency "mocha"
-  # This has problems on Windows, we need to find a better way:
-  # s.add_development_dependency "sys-proctable", "~> 0.9.0"
-  s.add_development_dependency "rspec-core", "~> 2.11.0"
-  s.add_development_dependency "rspec-expectations", "~> 2.11.0"
-  s.add_development_dependency "rspec-mocks", "~> 2.11.0"
+  s.add_development_dependency "rspec-core", "~> 2.12.2"
+  s.add_development_dependency "rspec-expectations", "~> 2.12.1"
+  s.add_development_dependency "rspec-mocks", "~> 2.12.1"
 
   # The following block of code determines the files that should be included
   # in the gem. It does this by reading all the files in the directory where

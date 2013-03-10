@@ -9,10 +9,27 @@ module VagrantPlugins
       autoload :Delete, File.expand_path("../action/delete", __FILE__)
       autoload :Connect, File.expand_path("../action/connect", __FILE__)
       autoload :Created, File.expand_path("../action/created", __FILE__)
+      autoload :SyncFolders, File.expand_path("../action/sync_folder", __FILE__)
       autoload :ReadSSHInfo, File.expand_path("../action/read_ssh_info", __FILE__)
       # Include the built-in modules so that we can use them as top-level
       # things.
       include Vagrant::Action::Builtin
+      
+      # This action is called when `vagrant provision` is called.
+      def self.action_provision
+        Vagrant::Action::Builder.new.tap do |b|
+          #b.use ConfigValidate
+          b.use Call, Created do |env, b2|
+            if !env[:result]
+              b2.use MessageNotCreated
+              next
+            end
+
+            b2.use Provision
+            b2.use SyncFolders
+          end
+        end
+      end
 
       # This action is called to terminate the remote machine.
       def self.action_destroy
@@ -67,9 +84,12 @@ module VagrantPlugins
           #b.use ConfigValidate
           b.use Connect
           b.use Call, Created do |env, b2|
-              if !env[:result]
-                  b2.use Boot
-              end
+            if env[:result]
+                #b2.use MessageAlreadyCreated
+                next
+            end
+            b2.use Boot
+            b2.use SyncFolders
           end
         end
       end

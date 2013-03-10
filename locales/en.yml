@@ -6,6 +6,9 @@ en:
         deleting: |-
           Deleting the instance...
 
+        rsync_folder: |-
+            Rsyncing folder: %{hostpath} => %{guestpath}
+
         states:
           short_not_created: |-
             not created
@@ -17,3 +20,12 @@ en:
           long_active: |-
             The nova instance is running. To stop this machine, you can run
             `vagrant halt`. To destroy the machine, you can run `vagrant destroy`.
+
+        errors:
+            rsync_error: |-
+                There was an error when attemping to rsync a share folder.
+                Please inspect the error message below for more info.
+
+                Host path: %{hostpath}
+                Guest path: %{guestpath}
+                Error: %{stderr}
