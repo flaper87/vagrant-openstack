@@ -32,7 +32,6 @@ module VagrantPlugins
 
           config = machine.provider_config
           ip = get_ip(os, server) || server.addresses[0].address
-          puts ip
 
           ssh_info = {
             :host => ip,

@@ -21,3 +21,7 @@ doc/
 .vagrant
 Vagrantfile
 !example_box/Vagrantfile
+Cheffile
+Cheffile.lock
+cookbooks
+provision.sh
