@@ -4,23 +4,25 @@ module VagrantPlugins
       class Boot
         def initialize(app, env)
           @app = app
+          @logger = Log4r::Logger.new("vagrant_openstack::action::boot")
         end
 
         def call(env)
-            config = env[:machine].provider_config
-            provider = env[:machine].provider
-            os = provider.connect(config)
-            if !env[:machine].id
-                puts os.server("85fc2b46-83e3-4845-bd27-f153b496e398")
-                server = os.create_server({
+          config = env[:machine].provider_config
+          os = env[:os_connection]
+          if !env[:machine].id
+            @logger.info("Attempting to boot a new VM")
+            server = os.create_server({
                     :imageRef => config.image, 
                     :flavorRef => config.flavor, 
                     :key_name => config.key, 
                     :name=>config.name})
-                env[:machine].id = server.id
-                puts env[:machine].id
-            end
-            @app.call(env)
+            env[:machine].id = server.id
+            env[:ui].warn(I18n.t("vagrant_openstack.vm_booted",
+                                :id => server.id,
+                                :name => server.name))
+          end
+          @app.call(env)
         end
       end
     end

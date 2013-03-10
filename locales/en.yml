@@ -1,0 +1,19 @@
+en:
+    vagrant_openstack:
+        vm_booted: |-
+            New VM created %{id} => %{name}
+
+        deleting: |-
+          Deleting the instance...
+
+        states:
+          short_not_created: |-
+            not created
+          long_not_created: |-
+            The nova instance is not created. Run `vagrant up` to create it.
+
+          short_active: |-
+            running
+          long_active: |-
+            The nova instance is running. To stop this machine, you can run
+            `vagrant halt`. To destroy the machine, you can run `vagrant destroy`.

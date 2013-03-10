@@ -4,32 +4,12 @@ require "openstack"
 module VagrantPlugins
   module ProviderOpenStack
     class Provider < Vagrant.plugin("2", :provider)
-      @@connection = nil
       attr_reader :driver
 
       def initialize(machine)
-        @logger  = Log4r::Logger.new("vagrant::provider::openstack")
         @machine = machine
-
-        # This method will load in our driver, so we call it now to
-        # initialize it.
-        machine_id_changed
       end
     
-      def connect(config)
-        if @@connection.nil? then
-          @connection = OpenStack::Connection.create({
-                            :username => config.user,
-                            :api_key => config.password,
-                            :auth_method => "password",
-                            :auth_url => config.url,
-                            :authtenant_name => config.tenant,
-                            :service_type => "compute"})
-        else
-            @@connection
-        end
-      end
-
       # @see Vagrant::Plugin::V1::Provider#action
       def action(name)
         # Attempt to get the action method from the Action class if it
@@ -40,65 +20,30 @@ module VagrantPlugins
         nil
       end
 
-      # If the machine ID changed, then we need to rebuild our underlying
-      # driver.
-      def machine_id_changed
-        id = @machine.id
-
-        begin
-          @logger.debug("Instantiating the driver for machine ID: #{@machine.id.inspect}")
-          @driver = Driver::Meta.new(id)
-        rescue Driver::Meta::VMNotFound
-          # The virtual machine doesn't exist, so we probably have a stale
-          # ID. Just clear the id out of the machine and reload it.
-          @logger.debug("VM not found! Clearing saved machine ID and reloading.")
-          id = nil
-          retry
-        end
-      end
-
-      # Returns the SSH info for accessing the VirtualBox VM.
       def ssh_info
-        # If the VM is not created then we cannot possibly SSH into it, so
-        # we return nil.
-        return nil if state == :not_created
-
-        # Return what we know. The host is always "127.0.0.1" because
-        # VirtualBox VMs are always local. The port we try to discover
-        # by reading the forwarded ports.
-        return {
-          :host => "127.0.0.1",
-          :port => @driver.ssh_port(@machine.config.ssh.guest_port)
-        }
+        # Run a custom action called "read_ssh_info" which does what it
+        # says and puts the resulting SSH info into the `:machine_ssh_info`
+        # key in the environment.
+        env = @machine.action("read_ssh_info")
+        env[:machine_ssh_info]
       end
 
-      # Return the state of VirtualBox virtual machine by actually
-      # querying VBoxManage.
-      #
-      # @return [Symbol]
       def state
-        # XXX: What happens if we destroy the VM but the UUID is still
-        # set here?
+        # Run a custom action we define called "read_state" which does
+        # what it says. It puts the state in the `:machine_state_id`
+        # key in the environment.
+        env = @machine.action("state")
 
-        # Determine the ID of the state here.
-        state_id = nil
-        state_id = :not_created if !@driver.uuid
-        state_id = @driver.read_state if !state_id
-        state_id = :unknown if !state_id
+        state_id = env[:machine_state_id]
 
-        # Translate into short/long descriptions
-        short = state_id.to_s.gsub("_", " ")
-        long  = I18n.t("vagrant.commands.status.#{state_id}")
+        # Get the short and long description
+        short = I18n.t("vagrant_openstack.states.short_#{state_id}")
+        long  = I18n.t("vagrant_openstack.states.long_#{state_id}")
 
-        # Return the state
+        # Return the MachineState object
         Vagrant::MachineState.new(state_id, short, long)
       end
 
-      # Returns a human-friendly string version of this provider which
-      # includes the machine's ID that this provider represents, if it
-      # has one.
-      #
-      # @return [String]
       def to_s
         id = @machine.id ? @machine.id : "new VM"
         "OpenStack (#{id})"
