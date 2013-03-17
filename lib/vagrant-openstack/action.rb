@@ -11,6 +11,7 @@ module VagrantPlugins
       autoload :Created, File.expand_path("../action/created", __FILE__)
       autoload :SyncFolders, File.expand_path("../action/sync_folder", __FILE__)
       autoload :ReadSSHInfo, File.expand_path("../action/read_ssh_info", __FILE__)
+      autoload :ReleaseIp, File.expand_path("../action/release_ip", __FILE__)
       # Include the built-in modules so that we can use them as top-level
       # things.
       include Vagrant::Action::Builtin
@@ -36,6 +37,7 @@ module VagrantPlugins
         Vagrant::Action::Builder.new.tap do |b|
           #b.use ConfigValidate
           b.use Connect
+          b.use ReleaseIp
           b.use Delete
         end
       end

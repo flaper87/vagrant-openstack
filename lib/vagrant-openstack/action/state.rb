@@ -21,7 +21,7 @@ module VagrantPlugins
           return :not_created if machine.id.nil?
 
           # Find the machine
-          server = os.server(machine.id)
+          server = os.servers.get(machine.id)
           if server.nil?
             # The machine can't be found
             @logger.info("Machine not found or terminated, assuming it got destroyed.")
@@ -29,7 +29,7 @@ module VagrantPlugins
             return :not_created
           end
 
-          state = server.status.downcase
+          state = server.state.downcase
           return state.to_sym
         end
       end

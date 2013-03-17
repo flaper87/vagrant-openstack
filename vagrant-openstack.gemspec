@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "vagrant-openstack"
 
   s.add_dependency "vagrant"
-  s.add_dependency "openstack", "~> 1.0.9"
+  s.add_dependency "fog", "~> 1.9.0"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec-core", "~> 2.12.2"

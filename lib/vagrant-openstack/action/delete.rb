@@ -13,10 +13,10 @@ module VagrantPlugins
 
         def call(env)
           os = env[:os_connection]
-          server = os.server(env[:machine].id)
+          server = os.servers.get(env[:machine].id)
 
           env[:ui].info(I18n.t("vagrant_openstack.deleting"))
-          server.delete!
+          server.destroy
           env[:machine].id = nil
 
           @app.call(env)

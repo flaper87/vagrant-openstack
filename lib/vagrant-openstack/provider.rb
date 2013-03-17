@@ -1,5 +1,4 @@
 require "log4r"
-require "openstack"
 
 module VagrantPlugins
   module ProviderOpenStack

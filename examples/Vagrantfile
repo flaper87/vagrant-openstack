@@ -22,6 +22,8 @@ Vagrant.configure("2") do |config|
     os.keypair = "my_key"
     os.image = "b9b3f324-80d2-4413-89ec-3d299ceb8279"
     
+    os.floating_ip = "192.168.1.100"
+
     os.name = "test"
     os.ssh_username = "my_cool_user"
     os.ssh_private_key = "~/not_custom_path/super_private"

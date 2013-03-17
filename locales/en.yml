@@ -1,13 +1,39 @@
 en:
     vagrant_openstack:
+        associating_ip: |-
+            Associating floating ip %{ip} => %{id}
+
+        ready: |-
+          The server is ready!
+
         vm_booted: |-
             New VM created %{id} => %{name}
+
+        vm_building: |-
+            Waiting for the VM to be built
 
         deleting: |-
           Deleting the instance...
 
         rsync_folder: |-
             Rsyncing folder: %{hostpath} => %{guestpath}
+
+        finding_flavor: |-
+          Finding flavor for server...
+        finding_image: |-
+          Finding image for server...
+        launching_server: |-
+          Launching a server with the following settings...
+        waiting_for_build: |-
+          Waiting for the server to be built...
+        waiting_for_ssh: |-
+          Waiting for SSH to become available...
+        warn_insecure_ssh: |-
+          Warning! By not specifying a custom public/private keypair,
+          Vagrant is defaulting to use the insecure keypair that ships with
+          Vagrant. While this isn't much of a big deal for local development,
+          this is quite insecure for remote servers. Please specify a custom
+          public/private keypair.
 
         states:
           short_not_created: |-

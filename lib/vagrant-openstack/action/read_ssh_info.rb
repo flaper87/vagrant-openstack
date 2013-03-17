@@ -1,5 +1,4 @@
 require "log4r"
-require "openstack"
 
 module VagrantPlugins
   module ProviderOpenStack
@@ -22,7 +21,7 @@ module VagrantPlugins
           return nil if machine.id.nil?
 
           # Find the machine
-          server = os.server(machine.id)
+          server = os.servers.get(machine.id)
           if server.nil?
             # The machine can't be found
             @logger.info("Machine couldn't be found, assuming it got destroyed.")
@@ -31,31 +30,23 @@ module VagrantPlugins
           end
 
           config = machine.provider_config
-          ip = get_ip(os, server) || server.addresses[0].address
-
           ssh_info = {
-            :host => ip,
-            :port => config.ssh_port,
+            :host => get_ip(os, server.id),
+            :port => 22,
             :username => config.ssh_username,
           }
 
           if config.ssh_private_key
               ssh_info[:private_key_path] = config.ssh_private_key
           end
-
+          
           return ssh_info
         end
 
-
-        def get_ip(os, server)
-          response = os.connection.req("GET", "/os-floating-ips")
-          fips = OpenStack.symbolize_keys(JSON.parse(response.body))
-
-          fips[:floating_ips].each do |floating_ip|
-              if floating_ip[:instance_id] == server.id
-                  return floating_ip[:ip]
-              end
-          end
+        def get_ip(os, id)
+            return os.list_all_addresses.body["floating_ips"]
+                     .select{|data| data['instance_id'] == id}
+                     .map{|addr| addr["ip"]}.first
         end
       end
     end
