@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "base"
 
   config.vm.provider :openstack do |os|
-    os.url = "http://127.0.0.1:5000/v2.0/"
+    os.url = "http://127.0.0.1:5000/v2.0/tokens"
     os.tenant = "my_tenant"
     os.user = "my_user"
     os.password = "super_password"
