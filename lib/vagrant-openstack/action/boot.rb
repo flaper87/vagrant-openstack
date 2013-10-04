@@ -105,7 +105,12 @@ module VagrantPlugins
 
             floating_ip = config.floating_ip
             if floating_ip.nil?
-                floating_ip = env[:os_connection].allocate_address.body["floating_ip"]["ip"]
+                begin
+                    floating_ip = env[:os_connection].allocate_address.body["floating_ip"]["ip"]
+                rescue Excon::Errors::RequestEntityTooLarge => e
+                    message = JSON.parse(e.response.body)["overLimit"]["message"]
+                    raise Excon::Errors::RequestEntityTooLarge, "Error allocating ip, Openstack returned message: #{message}" 
+                end
             end
 
             env[:ui].info(I18n.t("vagrant_openstack.associating_ip",
