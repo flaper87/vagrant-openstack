@@ -73,7 +73,12 @@ module VagrantPlugins
             ])
           end
           # Create the server
-          server = env[:os_connection].servers.create(options)
+          begin
+              server = env[:os_connection].servers.create(options)
+          rescue Excon::Errors::BadRequest => e
+              message = JSON.parse(e.response.body)["badRequest"]["message"]
+              raise Excon::Errors::BadRequest, "Error creating server, Openstack returned message: #{message}" 
+          end
 
           # Store the ID right away so we can track it
           env[:machine].id = server.id
