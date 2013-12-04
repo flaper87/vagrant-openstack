@@ -49,7 +49,7 @@ en:
 
         errors:
             rsync_error: |-
-                There was an error when attemping to rsync a share folder.
+                There was an error when attemping to rsync a shared folder.
                 Please inspect the error message below for more info.
 
                 Host path: %{hostpath}
