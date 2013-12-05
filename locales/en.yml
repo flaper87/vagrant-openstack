@@ -55,3 +55,7 @@ en:
                 Host path: %{hostpath}
                 Guest path: %{guestpath}
                 Error: %{stderr}
+            config:
+                openstack: |-
+                    There is a problem with the Openstack configuration. Make sure 
+                    you have provided every options to connect to your Openstack instance.

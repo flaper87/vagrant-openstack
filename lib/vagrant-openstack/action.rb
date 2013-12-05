@@ -19,7 +19,7 @@ module VagrantPlugins
       # This action is called when `vagrant provision` is called.
       def self.action_provision
         Vagrant::Action::Builder.new.tap do |b|
-          #b.use ConfigValidate
+          b.use ConfigValidate
           b.use Call, Created do |env, b2|
             if !env[:result]
               b2.use MessageNotCreated
@@ -35,7 +35,7 @@ module VagrantPlugins
       # This action is called to terminate the remote machine.
       def self.action_destroy
         Vagrant::Action::Builder.new.tap do |b|
-          #b.use ConfigValidate
+          b.use ConfigValidate
           b.use Connect
           b.use ReleaseIp
           b.use Delete
@@ -47,7 +47,7 @@ module VagrantPlugins
       # key.
       def self.action_state
         Vagrant::Action::Builder.new.tap do |b|
-          #b.use ConfigValidate
+          b.use ConfigValidate
           b.use Connect
           b.use State
         end
@@ -58,7 +58,7 @@ module VagrantPlugins
       # key.
       def self.action_read_ssh_info
         Vagrant::Action::Builder.new.tap do |b|
-          #b.use ConfigValidate
+          b.use ConfigValidate
           b.use Connect
           b.use ReadSSHInfo
         end
@@ -67,7 +67,7 @@ module VagrantPlugins
       # This action is called to SSH into the machine.
       def self.action_ssh
         Vagrant::Action::Builder.new.tap do |b|
-          #b.use ConfigValidate
+          b.use ConfigValidate
           b.use Call, Created do |env, b2|
             if !env[:result]
               #b2.use MessageNotCreated
@@ -83,7 +83,7 @@ module VagrantPlugins
       # the box, configuring metadata, and booting.
       def self.action_up
         Vagrant::Action::Builder.new.tap do |b|
-          #b.use ConfigValidate
+          b.use ConfigValidate
           b.use Connect
           b.use Call, Created do |env, b2|
             if env[:result]
